@@ -1,0 +1,11 @@
+---
+# tasks file for mysql-backup-verification
+
+- name: Verify if backup exists
+  stat:
+    path: "/opt/employee_db_{{ backup_date }}.sql"
+  register: backup_details
+
+- debug:
+    msg: "The backup exists"
+  when: backup_details.stat.exists

@@ -1,0 +1,12 @@
+---
+- name: Install and Configure MySql, Create Database and user
+  become: yes
+  hosts: mysqlserver
+  roles:
+    - packages/mysql/mysql-dbbackup
+
+#  pre_tasks:
+#  - name: Install cron
+#    yum:
+#      pkg: cronie
+#      state: present

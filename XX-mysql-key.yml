@@ -1,0 +1,7 @@
+---
+- name: Authorize User
+  hosts: mysqlbackupserver
+  become: yes
+  roles:
+    - packages/mysql/mysql-create-key
+  

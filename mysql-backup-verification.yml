@@ -1,0 +1,6 @@
+---
+- name: Verify if the backup was taken
+  hosts: mysqlbackupserver
+  become: yes
+  roles:
+    - packages/mysql/mysql-backup-verification

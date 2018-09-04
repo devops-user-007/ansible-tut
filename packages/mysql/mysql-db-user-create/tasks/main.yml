@@ -1,0 +1,15 @@
+---
+# tasks file for mysql-db-user-create
+
+- name: Create Employee Database
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+
+
+- name: Create user for the database
+  mysql_user:
+    name: "{{ db_user_name }}"
+    password: "{{ db_user_password }}"
+    priv: "{{ db_name }}.*:ALL"
+    state: present

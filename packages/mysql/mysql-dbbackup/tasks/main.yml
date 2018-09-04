@@ -1,0 +1,36 @@
+---
+# tasks file for mysql-dbbackup
+
+- name: Create backup directory
+  file:
+    path: "{{ mysql_backup_dir }}"
+    recurse: yes
+    state: directory
+
+
+- name: Create directory to store the backup script
+  file:
+    path: /opt/scripts
+    recurse: yes
+    state: directory
+
+
+- name: Copy script to remote location
+  become: yes
+  copy:
+    #src: cron.j2
+    #dest: /etc/cron.{{ mysql_backup_frequency }}/mysql-backup
+    src: daily_db_backup.sh
+    dest: /opt/scripts/daily_db_backup.sh
+    mode: 0755
+
+
+- name: Creates an entry like in crontab
+  cron:
+    name: "mysql_backup_job"
+    user: root
+    month: "*"
+    day: "*"
+    hour: "23"
+    minute: "10"
+    job: "/opt/scripts/daily_mysql_backup.sh"

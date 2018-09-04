@@ -1,0 +1,8 @@
+---
+- name: Install and Configure MySql, Create Database and user
+  become: yes
+  hosts: all
+  roles:
+    - packages/mysql/mysql-install
+    - packages/mysql/mysql-configure
+    - packages/mysql/mysql-db-user-create

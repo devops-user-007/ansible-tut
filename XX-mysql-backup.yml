@@ -1,0 +1,6 @@
+---
+- name: Backup MySql database
+  become: yes
+  hosts: mysqlserver
+  roles:
+    - packages/mysql/mysql-cronjob

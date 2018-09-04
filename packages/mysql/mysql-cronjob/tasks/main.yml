@@ -1,0 +1,26 @@
+---
+# tasks file for mysql-cronjob
+
+- name: Copy script.sh to backup server
+  copy:
+    src: script.sh
+    dest: /root
+    owner: root
+    group: root
+    mode: 0755
+
+
+- name: Run script for backup
+  shell: /root/script.sh
+
+
+- name: Creates nightly backup of MySql Database
+  cron:
+    name: MySqlDB_Backup
+    month: "*"
+    day: "*"
+    hour: "20"
+    minute: "45"
+    backup: yes
+    job: 'touch /pippo > ok'
+    state: present

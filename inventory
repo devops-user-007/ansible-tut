@@ -1,0 +1,6 @@
+[mysqlserver]
+192.168.10.6
+
+[mysqlbackupserver]
+192.168.10.7
+

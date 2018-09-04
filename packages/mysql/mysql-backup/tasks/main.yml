@@ -1,0 +1,26 @@
+--
+# tasks file for mysql-backup
+
+- name: Take backup of MySql DB
+  vars:
+    - exclude_db_backup
+      - "Database"
+      - "information_schema"
+      - "performance_schema"
+      - "mysql"
+  tasks:
+    - name: Get Database Name
+      shell: 'mysql -u root -p{{ mysql_root_password }} -e "show databases;"'
+      register: db_list
+      
+    - name: Backup Database
+      mysql_db:
+        state: dump
+        name: "{{ item }}"
+        target: "/tmp/{{ item }}.sql"
+        login_user: "{{ mysql_root_user }}"
+        login_password: "{{ mysql_root_password }}"
+      with_items: "{{ db_list.stdout_lines | difference(exclude_db) }}"
+
+    - debug: 
+        msg: "{{ db_list.stdout_lines | difference(exclude_db) }}"

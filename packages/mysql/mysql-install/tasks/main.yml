@@ -1,0 +1,43 @@
+---
+# tasks file for mysql-install
+
+- name: Download MySql Repository
+  get_url:
+    url: "{{ mysql_repo_full_url }}"
+    dest: "{{ mysql_download_path }}"
+
+- name: Install MySql Repository
+  command: /usr/bin/rpm -ivh "{{ mysql_download_path }}{{ mysql_setup_file }}"
+  ignore_errors: yes
+
+- name: Import GPG key
+  rpm_key:
+    key: "{{ mysql_gpg_url }}"
+    state: present
+
+
+# Check if MySql is installed on the nodes
+# Thus, we avoid additional step of going installation process again
+# This would be carried out in the next step
+- name: Check if MySql is already installed
+  command: rpm -qa mysql-server
+  register: mysql_installation
+
+
+# We will install MySql and MySql python if not already installed
+- name: Install MySql
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - MySQL-python
+    - mysql-server
+  #when: mysql_installation.stdout.find('is not installed') != -1
+  ignore_errors: true
+
+
+- name: Start MySql Service
+  service:
+    name: mysqld
+    state: started
+
